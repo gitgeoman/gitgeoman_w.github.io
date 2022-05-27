@@ -5,19 +5,39 @@ $(document).ready(function () {
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
   );
   // dodanie własnych danych
-  let mojeDane = L.tileLayer.wms("http://127.0.0.1:8080/geoserver/prge/wms", {
-    layers: "prge:województwa",
-    format: "image/png",
-    transparent: "true",
-    version: "1.1.1",
-  });
+  let wojewodztwa = L.tileLayer.wms(
+    "http://127.0.0.1:8080/geoserver/prge/wms",
+    {
+      layers: "prge:województwa",
+      format: "image/png",
+      transparent: "true",
+      version: "1.1.1",
+    }
+  );
+
+  // dodaje wlasną kompozycję z geoserwera
+  let kompozycja = L.tileLayer.wms(
+    "http://127.0.0.1:8080/geoserver/KOMPOZYCJA_D_R_L_B/wms",
+    {
+      layers: "KOMPOZYCJA_D_R_L_B",
+      format: "image/png",
+      transparent: "true",
+      version: "1.1.1",
+    }
+  );
 
   // obsługa warstw
   let baseMaps = {
     "dane z OSM": adresOSM,
-    "moje dane": mojeDane,
+    "moje dane": wojewodztwa,
   };
-  L.control.layers(baseMaps).addTo(mymap);
+  // obsługa warstw
+  let overlays = {
+    kompozycja1asdf: kompozycja,
+    wojewodztwa: wojewodztwa,
+  };
+
+  L.control.layers(overlays, baseMaps).addTo(mymap);
   mymap.addLayer(adresOSM);
 
   // okodowanie guzika który ma zamykać modal
